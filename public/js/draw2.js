@@ -5,7 +5,12 @@ var thickness = new Point({length: 5, angle: null});
 var path = new Path();
 var strokeEnds = 2;
 
+function prevent(e) {
+  e.preventDefault();
+}
+
 function onMouseDown(event) {
+    prevent(event);
     path = new Path();
     path.fillColor = "black";
 }
@@ -72,9 +77,9 @@ function serializeSegments(segments)
 var secondLayer;
 var secondPath;
 socket.on('pathReady', function(data) {
-  secondLayer = new Layer();
+  //secondLayer = new Layer();
 
-  console.log(data.segments);
+  //console.log(data.segments);
   secondPath = new Path(data.segments);
   secondPath.strokeColor = 'red';
   secondPath.fillColor = 'red';
@@ -82,3 +87,21 @@ socket.on('pathReady', function(data) {
   var canvasElement = document.getElementById('canvas');
   view.draw();
 });
+
+DomReady.ready(function() {
+  var aElements = document.getElementsByTagName('a');
+  console.log(aElements);
+  aElements.forEach(function(aElement) {
+    //console.log(aElement);
+    aElement.addEventListener('touchmove', prevent);
+  });
+});
+
+function toArray(obj) {
+  var array = [];
+  // iterate backwards ensuring that length is an UInt32
+  for (var i = obj.length >>> 0; i--;) { 
+    array[i] = obj[i];
+  }
+  return array;
+}

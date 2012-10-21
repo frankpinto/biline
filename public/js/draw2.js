@@ -6,6 +6,7 @@ var path = new Path();
 var strokeEnds = 2;
 
 function prevent(e) {
+  console.log('got here');
   e.preventDefault();
 }
 
@@ -88,20 +89,13 @@ socket.on('pathReady', function(data) {
   view.draw();
 });
 
+// For tablet, prevent browser window moving
 DomReady.ready(function() {
   var aElements = document.getElementsByTagName('a');
-  console.log(aElements);
-  aElements.forEach(function(aElement) {
-    //console.log(aElement);
-    aElement.addEventListener('touchmove', prevent);
-  });
-});
+  for (i = 0; i < aElements.length; i++)
+    aElements[i].addEventListener('touchmove', prevent);
 
-function toArray(obj) {
-  var array = [];
-  // iterate backwards ensuring that length is an UInt32
-  for (var i = obj.length >>> 0; i--;) { 
-    array[i] = obj[i];
-  }
-  return array;
-}
+  var buttonElements = document.getElementsByTagName('button');
+  for (i = 0; i < buttonElements.length; i++)
+    buttonElements[i].addEventListener('touchmove', prevent);
+});

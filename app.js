@@ -6,8 +6,10 @@ var io      = require('socket.io').listen(app, {log: false});
 
 io.sockets.on('connection', function (socket) {
   console.log('Drawer named ' + socket.id + ' has joined the session.');
-  socket.on('canvas change', function (data) {
-    socket.broadcast.emit('other canvas change', data);
+  //console.log('Waiting for other client to connect');
+  socket.on('mouseup', function (data) {
+    console.log(data);
+    socket.broadcast.emit('pathReady', data);
   });
 
   socket.on('disconnect', function() {

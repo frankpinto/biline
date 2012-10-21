@@ -2,7 +2,7 @@
 var socket = io.connect('http://' + window.location.hostname);
 
 var thickness = new Point({length: 5, angle: null});
-var path;
+var path = new Path();
 var strokeEnds = 2;
 
 function onMouseDown(event) {
@@ -37,7 +37,7 @@ function onMouseUp(event) {
     addStrokes(event.point, delta);
     path.closed = true;
     var segments = serializeSegments(path.segments);
-    socket.emit('mouseup', {segments: segments});
+    socket.emit('segmentsReady', {segments: segments});
 }
 
 function addStrokes(point, delta) {
@@ -69,3 +69,16 @@ function serializeSegments(segments)
     return segments;
 }
 
+var secondLayer;
+var secondPath;
+socket.on('pathReady', function(data) {
+  secondLayer = new Layer();
+
+  console.log(data.segments);
+  secondPath = new Path(data.segments);
+  secondPath.strokeColor = 'red';
+  secondPath.fillColor = 'red';
+  secondPath.closed = true;
+  var canvasElement = document.getElementById('canvas');
+  view.draw();
+});

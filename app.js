@@ -7,8 +7,7 @@ var io      = require('socket.io').listen(app, {log: false});
 io.sockets.on('connection', function (socket) {
   console.log('Drawer named ' + socket.id + ' has joined the session.');
   //console.log('Waiting for other client to connect');
-  socket.on('mouseup', function (data) {
-    console.log(data);
+  socket.on('segmentsReady', function (data) {
     socket.broadcast.emit('pathReady', data);
   });
 

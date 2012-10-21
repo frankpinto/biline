@@ -24,7 +24,6 @@ function onMouseDrag(event) {
         path.add(top);
         path.insert(0, bottom);
     }
-    path.smooth();
     
     lastPoint = event.middlePoint;
 }
@@ -34,7 +33,6 @@ function onMouseUp(event) {
     delta.length = tool.maxDistance;
     addStrokes(event.point, delta);
     path.closed = true;
-    path.smooth();
 }
 
 function addStrokes(point, delta) {

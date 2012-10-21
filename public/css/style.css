@@ -4,13 +4,14 @@ body
 	padding: 0;
 	overflow: hidden;
 	font-family: sans-serif;
+	-webkit-tap-highlight-color: transparent;
 }
 
 h1
 {
-  font-size: 48px;
+  font-size: 24px;
   letter-spacing: 10px;
-  padding: 30px 0 15px;
+  padding: 0 0 50px;
   margin: 0;
 }
 
@@ -39,22 +40,27 @@ a
   top: 50%;
   left: 50%;
   margin-left: -100px;
-  margin-top: -125px;
+  margin-top: -150px;
 }
 
 .login-button
 {
   color: #fff;
-  font-size: 12px;
-  background: rgba(0,0,0,.9);
-  padding: 30px 0;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  background: #000;
   display: block;
-  width: 100%;
+  width: 200px;
+  line-height: 200px;
+  height: 200px;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
 }
 
 .login-button:active
 {
-  opacity: .7;
+  background: #333;
 }
 
 #canvas
@@ -356,6 +362,7 @@ a
   height: 200px;
   background-color: rgba(0,0,0,.3);
   -webkit-border-radius: 50%;
+  border-radius: 50%;
   border-radius: 50%;
   position: absolute;
   display: block;

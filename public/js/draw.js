@@ -15,15 +15,16 @@ function onMouseDown(event) {
     prevent(event);
     path = new Path();
     path.fillColor = "black";
+    redrawData.startPoint = event.point;
 }
 
 var lastPoint;
 function onMouseDrag(event) {
     // If this is the first drag event,
     // add the strokes at the start:
-    if(event.count == 1) {
-        addStrokes(event.middlePoint, event.delta * -1);
-    } else {
+    //if(event.count == 1) {
+    //    addStrokes(event.middlePoint, event.delta * -1);
+    //} else {
         var step = event.delta / 2;
         thickness.angle = step.angle + 90;
 
@@ -37,14 +38,13 @@ function onMouseDrag(event) {
     }
     
     lastPoint = event.middlePoint;
-    //socket.emit('mousedrag', {point: event.point});
 }
 
 function onMouseUp(event) {
     var delta = event.point - lastPoint;
     redrawData.serializedPoints.push([event.point.x, event.point.y]);
     delta.length = tool.maxDistance;
-    addStrokes(event.point, delta);
+    //addStrokes(event.point, delta);
     path.closed = true;
     socket.emit('segmentsReady', {points: serializedPoints});
 }

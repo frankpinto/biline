@@ -38,8 +38,7 @@ app.get('/', function(req, res, next) {
   res.end();
 });
 
-/*
-app.get('/auth/twitter', function (req, res) {
+/*app.get('/auth/twitter', function (req, res) {
   console.log('got called');
   oauth.getOAuthRequestToken( function (err, oauth_token, oauth_token_secret, results) {
     if (err) {
@@ -53,6 +52,7 @@ app.get('/auth/twitter', function (req, res) {
   });  
 });
 
+/*
 app.get('/auth/twitter/callback', function (req, res) {
   if (req.session.oauth) {
     req.session.oauth.verifier = req.query.oauth_verifier;

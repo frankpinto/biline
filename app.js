@@ -1,5 +1,5 @@
 #!/usr/local/bin/node
-/*
+
 var OAuth= require('oauth').OAuth;
 
 var oauth = new OAuth(
@@ -8,10 +8,10 @@ var oauth = new OAuth(
   'UFzttyoZssfh6V8o5uapA',
   'HI5CLqlwQtuyPOnp9j1uW515kpe5wzN7D8JLjGH3Yw',
   '1.0',
-  'http://frankpinto.info/auth/twitter/callback',
+  'http://frankpinto.info:3000/auth/twitter/callback',
   'HMAC-SHA1'
 );
-*/
+
 var express = require('express');
 var app = express.createServer();
 var io = require('socket.io').listen(app, {log: false});
@@ -34,11 +34,17 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.session({secret: 'pandas'}));
 
 app.get('/', function(req, res, next) {
+  if (req.session) {
+    console.log(req.session);
+    req.session = null;
+  } else {
+    req.session = null;
+  }
   res.render('index.ejs', {layout: false});
   res.end();
 });
 
-/*app.get('/auth/twitter', function (req, res) {
+app.get('/auth/twitter', function (req, res) {
   console.log('got called');
   oauth.getOAuthRequestToken( function (err, oauth_token, oauth_token_secret, results) {
     if (err) {
@@ -52,7 +58,7 @@ app.get('/', function(req, res, next) {
   });  
 });
 
-/*
+
 app.get('/auth/twitter/callback', function (req, res) {
   if (req.session.oauth) {
     req.session.oauth.verifier = req.query.oauth_verifier;
@@ -66,11 +72,12 @@ app.get('/auth/twitter/callback', function (req, res) {
           req.session.oauth.access_token = oauth_access_token;
           req.session.oauth.access_token_secret = oauth_access_token_secret;
           res.redirect('/');
+          console.log(results);
         }
     });
   }
 });
-*/
+
 
 app.listen(3000, function() {
     console.log('Now listening on port 3000');    

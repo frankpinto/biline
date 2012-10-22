@@ -4,7 +4,8 @@ var socket = io.connect('http://' + window.location.hostname);
 var thickness = new Point({length: 5, angle: null});
 var path;
 var strokeEnds = 2;
-var serializedPoints = [];
+var redrawData = {};
+redrawData.serializedPoints = [];
 
 function prevent(e) {
   e.preventDefault();
@@ -31,8 +32,8 @@ function onMouseDrag(event) {
 
         path.add(top);
         path.insert(0, bottom);
-        serializedPoints.push([top.x, top.y]);
-        serializedPoints.splice(0, 0, [bottom.x, bottom.y]);
+        redrawData.serializedPoints.push([top.x, top.y]);
+        redrawData.serializedPoints.splice(0, 0, [bottom.x, bottom.y]);
     }
     
     lastPoint = event.middlePoint;
@@ -41,15 +42,10 @@ function onMouseDrag(event) {
 
 function onMouseUp(event) {
     var delta = event.point - lastPoint;
-    serializedPoints.push([event.point.x, event.point.y]);
+    redrawData.serializedPoints.push([event.point.x, event.point.y]);
     delta.length = tool.maxDistance;
     addStrokes(event.point, delta);
     path.closed = true;
-    //var segments = serializeSegments(serializedPoints);
-  console.log(projects);
-  console.log(views);
-  console.log(tools);
-    //socket.emit('segmentsReady', {segments: segments});
     socket.emit('segmentsReady', {points: serializedPoints});
 }
 
@@ -69,19 +65,6 @@ function addStrokes(point, delta) {
     }
 }
 
-function serializeSegments(segments)
-{
-    for (i = 0; i < segments.length; i++)
-    {
-      segment = segments[i];
-      delete segment._path;
-      delete segment._handleIn._owner;
-      delete segment._handleOut._owner;
-      delete segment._point._owner;
-    }
-    return segments;
-}
-
 var secondLayer;
 var secondPath;
 socket.on('pathReady', function(data) {
@@ -93,11 +76,6 @@ socket.on('pathReady', function(data) {
   console.log(data.points);
   for (index in data.points)
     path.add(data.points[index]);
-  //console.log(data.segments);
-  //secondPath = new Path(data.segments);
-  //secondPath.strokeColor = 'red';
-  //secondPath.fillColor = 'red';
-  //secondPath.closed = true;
   var canvasElement = document.getElementById('canvas');
   view.draw();
 });

@@ -8,20 +8,23 @@
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/js/domready.js"></script>
     <script type="text/javascript" src="/js/paper.js"></script>
+    <script type="text/javascript" src="/js/domchanges.js"></script>
     <script type="text/paperscript" canvas="canvas" src="/js/draw.js"></script>
   </head>
   <body>
     <div id="container" class="container">
       <canvas id="canvas" resize="true"></canvas>
+      <% if (!username) { %>
       <div class="login">
         <h1>BiLine</h1>
         <a href="/auth/twitter" class="login-button">Login with Twitter</a>
       </div>
+      <% } %>
       <div id="account" class="grab-container account-container">
         <a href="#account" class="grab grab-account">Account</a>
         <a href="#" class="grab back grab-account">Account</a>
         <div class="account-user">
-          <div class="user">@frankPinto</div>
+          <div class="user"><%= username ? '@'+username : '@dummyuser' %></div>
           <div class="logout">Logout</div>
         </div>
         <div class="account-history">

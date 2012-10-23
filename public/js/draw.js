@@ -1,4 +1,4 @@
-var socket = io.connect('http://' + window.location.hostname);
+socket = io.connect('http://' + window.location.hostname);
 
 // Script-wide stroke specific variables
 var thickness = new Point({length: 5, angle: null});
@@ -34,7 +34,7 @@ function addStrokes(point, delta) {
  * Event listeners - take care of drawing
  */
 function onMouseDown(event) {
-    prevent(event);
+    //prevent(event);
     path = new Path();
     path.fillColor = "black";
     redrawData.startPoint = event.point;
@@ -64,3 +64,18 @@ function onMouseUp(event) {
     path.closed = true;
     socket.emit('segmentsReady', {points: redrawData.serializedPoints});
 }
+
+var secondLayer;
+var secondPath;
+socket.on('pathReady', function(data) {
+  //secondLayer = new Layer();
+
+  path = new Path();
+  path.strokeColor = 'red';
+  path.strokeWidth = 10;
+  console.log(data.points);
+  for (index in data.points)
+    path.add(data.points[index]);
+  var canvasElement = document.getElementById('canvas');
+  view.draw();
+});

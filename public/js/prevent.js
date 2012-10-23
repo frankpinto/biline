@@ -2,7 +2,6 @@ function prevent(e) {
   e.preventDefault();
 }
 
-
 // For tablet, prevent browser window moving
 DomReady.ready(function() {
   var aElements = document.getElementsByTagName('a');

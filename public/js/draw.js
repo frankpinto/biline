@@ -35,7 +35,7 @@ function onMouseDrag(event) {
         path.insert(0, bottom);
         redrawData.serializedPoints.push([top.x, top.y]);
         redrawData.serializedPoints.splice(0, 0, [bottom.x, bottom.y]);
-    }
+    //}
     
     lastPoint = event.middlePoint;
 }
@@ -46,7 +46,7 @@ function onMouseUp(event) {
     delta.length = tool.maxDistance;
     //addStrokes(event.point, delta);
     path.closed = true;
-    socket.emit('segmentsReady', {points: serializedPoints});
+    socket.emit('segmentsReady', {points: redrawData.serializedPoints});
 }
 
 function addStrokes(point, delta) {

@@ -4,7 +4,8 @@ var socket = io.connect('http://' + window.location.hostname);
 var thickness = new Point({length: 5, angle: null});
 var path;
 var strokeEnds = 2;
-var serializedPoints = [];
+var redrawData = {};
+redrawData.serializedPoints = [];
 
 function prevent(e) {
   e.preventDefault();
@@ -14,15 +15,16 @@ function onMouseDown(event) {
     prevent(event);
     path = new Path();
     path.fillColor = "black";
+    redrawData.startPoint = event.point;
 }
 
 var lastPoint;
 function onMouseDrag(event) {
     // If this is the first drag event,
     // add the strokes at the start:
-    if(event.count == 1) {
-        addStrokes(event.middlePoint, event.delta * -1);
-    } else {
+    //if(event.count == 1) {
+    //    addStrokes(event.middlePoint, event.delta * -1);
+    //} else {
         var step = event.delta / 2;
         thickness.angle = step.angle + 90;
 
@@ -31,26 +33,20 @@ function onMouseDrag(event) {
 
         path.add(top);
         path.insert(0, bottom);
-        serializedPoints.push([top.x, top.y]);
-        serializedPoints.splice(0, 0, [bottom.x, bottom.y]);
-    }
+        redrawData.serializedPoints.push([top.x, top.y]);
+        redrawData.serializedPoints.splice(0, 0, [bottom.x, bottom.y]);
+    //}
     
     lastPoint = event.middlePoint;
-    //socket.emit('mousedrag', {point: event.point});
 }
 
 function onMouseUp(event) {
     var delta = event.point - lastPoint;
-    serializedPoints.push([event.point.x, event.point.y]);
+    redrawData.serializedPoints.push([event.point.x, event.point.y]);
     delta.length = tool.maxDistance;
-    addStrokes(event.point, delta);
+    //addStrokes(event.point, delta);
     path.closed = true;
-    //var segments = serializeSegments(serializedPoints);
-  console.log(projects);
-  console.log(views);
-  console.log(tools);
-    //socket.emit('segmentsReady', {segments: segments});
-    socket.emit('segmentsReady', {points: serializedPoints});
+    socket.emit('segmentsReady', {points: redrawData.serializedPoints});
 }
 
 function addStrokes(point, delta) {
@@ -69,19 +65,6 @@ function addStrokes(point, delta) {
     }
 }
 
-function serializeSegments(segments)
-{
-    for (i = 0; i < segments.length; i++)
-    {
-      segment = segments[i];
-      delete segment._path;
-      delete segment._handleIn._owner;
-      delete segment._handleOut._owner;
-      delete segment._point._owner;
-    }
-    return segments;
-}
-
 var secondLayer;
 var secondPath;
 socket.on('pathReady', function(data) {
@@ -93,11 +76,6 @@ socket.on('pathReady', function(data) {
   console.log(data.points);
   for (index in data.points)
     path.add(data.points[index]);
-  //console.log(data.segments);
-  //secondPath = new Path(data.segments);
-  //secondPath.strokeColor = 'red';
-  //secondPath.fillColor = 'red';
-  //secondPath.closed = true;
   var canvasElement = document.getElementById('canvas');
   view.draw();
 });

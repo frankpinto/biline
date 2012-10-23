@@ -5,18 +5,21 @@
     <title>Biline</title>
     <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="/css/style.css">
-    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/js/domready.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/js/paper.js"></script>
     <script type="text/paperscript" canvas="canvas" src="/js/draw.js"></script>
+    <script type="text/paperscript" canvas="canvas" src="/js/redraw.js"></script>
   </head>
   <body>
     <div id="container" class="container">
       <canvas id="canvas" resize="true"></canvas>
+
       <div class="login">
         <h1>BiLine</h1>
         <a href="/auth/twitter" class="login-button">Login with Twitter</a>
       </div>
+
       <div id="account" class="grab-container account-container">
         <a href="#account" class="grab grab-account">Account</a>
         <a href="#" class="grab back grab-account">Account</a>
@@ -85,6 +88,7 @@
           </ul>
         </div>
       </div>
+
       <a class="home" href="#"></a>
       <div id="tools" class="grab-container tools-container">
         <a href="#tools" class="grab grab-tools">Tools</a>
@@ -98,9 +102,11 @@
         <div class="icon-size icon-med"></div>
         <div class="icon-size icon-lg"></div>
       </div>
+
       <a class="home" href="#"></a>
       <button class="proceed confirm"></button>
       <button class="proceed undo"></button>
     </div>
+    <script type="text/javascript" src="/js/prevent.js">
   </body>
 </html>

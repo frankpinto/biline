@@ -1,11 +1,13 @@
 //tool.fixedDistance = 10;
 var socket = io.connect('http://' + window.location.hostname);
 
-var thickness = new Point({length: 5, angle: null});
+var thickMag = 5;
+var thickness = new Point({length: thickMag, angle: null});
 var path;
 var strokeEnds = 2;
-var redrawData = {};
-redrawData.serializedPoints = [];
+var redrawData = [];
+var serializedPath = {}; // Changes on every drawing
+//redrawData.serializedPoints = [];
 
 function prevent(e) {
   e.preventDefault();
@@ -15,7 +17,8 @@ function onMouseDown(event) {
     prevent(event);
     path = new Path();
     path.fillColor = "black";
-    redrawData.startPoint = event.point;
+    //path.add(event.point);
+    serializedPath = {points: [], startPoint: null, endPoint: null};
 }
 
 var lastPoint;
@@ -28,25 +31,28 @@ function onMouseDrag(event) {
         var step = event.delta / 2;
         thickness.angle = step.angle + 90;
 
-        var top = event.middlePoint + thickness;
-        var bottom = event.middlePoint - thickness;
+        var top = event.point + thickness;
+        var bottom = event.point - thickness;
 
         path.add(top);
         path.insert(0, bottom);
-        redrawData.serializedPoints.push([top.x, top.y]);
-        redrawData.serializedPoints.splice(0, 0, [bottom.x, bottom.y]);
+        serializedPath.points.push([top.x, top.y]);
+        serializedPath.points.splice(0, 0, [bottom.x, bottom.y]);
     //}
     
-    lastPoint = event.middlePoint;
+    lastPoint = event.point;
 }
 
 function onMouseUp(event) {
     var delta = event.point - lastPoint;
-    redrawData.serializedPoints.push([event.point.x, event.point.y]);
     delta.length = tool.maxDistance;
     //addStrokes(event.point, delta);
     path.closed = true;
-    socket.emit('segmentsReady', {points: redrawData.serializedPoints});
+    //path.add(event.point);
+    //serializedPath.points.push([event.point.x, event.point.y]);
+    serializedPath.endPoint = event.point;
+    redrawData.push(serializedPath);
+    socket.emit('segmentsReady', {data: redrawData});
 }
 
 function addStrokes(point, delta) {
@@ -65,19 +71,37 @@ function addStrokes(point, delta) {
     }
 }
 
+var originalLayer;
 var secondLayer;
-var secondPath;
-socket.on('pathReady', function(data) {
-  //secondLayer = new Layer();
+var pathsDrawn = 0;
+socket.on('pathReady', function(packet) {
+  if (!secondLayer)
+  {
+    originalLayer = project.activeLayer;
+    secondLayer = new Layer();
+  }
+  else
+    secondLayer.activate();
 
-  path = new Path();
-  path.strokeColor = 'red';
-  path.strokeWidth = 10;
-  console.log(data.points);
-  for (index in data.points)
-    path.add(data.points[index]);
+  paths = packet.data;
+  while (pathsDrawn < paths.length)
+  {
+    var newPath = new Path();
+    newPath.strokeColor = 'red';
+    newPath.fillColor = 'red';
+    newPath.strokeWidth = 1;
+    newPath.closed = true;
+    for (index in paths[pathsDrawn].points)
+      newPath.add(paths[pathsDrawn].points[index]);
+    pathsDrawn++;
+  }
+  
+  // Make sure it draws immediately
   var canvasElement = document.getElementById('canvas');
   view.draw();
+  
+  // Switch back to what user is doing
+  originalLayer.activate();
 });
 
 // For tablet, prevent browser window moving

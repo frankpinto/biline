@@ -3,7 +3,7 @@
  */
 
 // Get current PaperScope context
-var newScope = (function(paper) {
+var newScope = (function(paper, socket) {
   paper.install(this);
 
   var originalLayer;
@@ -39,4 +39,4 @@ var newScope = (function(paper) {
     originalLayer.activate();
   });
   return this;
-})(paper);
+})(paper, socket);

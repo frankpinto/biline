@@ -1,4 +1,3 @@
-socket = io.connect('http://' + window.location.hostname);
 
 // Script-wide stroke specific variables
 var thickMag = 5;

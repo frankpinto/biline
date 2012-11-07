@@ -67,7 +67,7 @@ function onMouseUp(event) {
     socket.emit('segmentsReady', {data: redrawData});
 }
 
-if (paper)
+if (paper.project)
 {
 	var event = new CustomEvent("paperReady", {  
 		//detail: {paper: paper},

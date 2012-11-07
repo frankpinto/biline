@@ -1,4 +1,3 @@
-
 // Script-wide stroke specific variables
 var thickMag = 5;
 var thickness = new Point({length: thickMag, angle: null});
@@ -68,35 +67,15 @@ function onMouseUp(event) {
     socket.emit('segmentsReady', {data: redrawData});
 }
 
-//var originalLayer;
-//var secondLayer;
-//var pathsDrawn = 0;
-//socket.on('pathReady', function(packet) {
-//  if (!secondLayer)
-//  {
-//    originalLayer = project.activeLayer;
-//    secondLayer = new Layer();
-//  }
-//  else
-//    secondLayer.activate();
-//
-//  paths = packet.data;
-//  while (pathsDrawn < paths.length)
-//  {
-//    var newPath = new Path();
-//    newPath.strokeColor = 'red';
-//    newPath.fillColor = 'red';
-//    newPath.strokeWidth = 1;
-//    newPath.closed = true;
-//    for (index in paths[pathsDrawn].points)
-//      newPath.add(paths[pathsDrawn].points[index]);
-//    pathsDrawn++;
-//  }
-//
-//  // Make sure it draws immediately
-//  var canvasElement = document.getElementById('canvas');
-//  view.draw();
-//
-//  // Switch back to what user is doing
-//  originalLayer.activate();
-//});
+if (paper)
+{
+	var event = new CustomEvent("paperReady", {  
+		//detail: {paper: paper},
+		bubbles: true,  
+		cancelable: true  
+	}); 
+	document.dispatchEvent(event);
+	console.log('Dispatched paperReady event', paper);
+}
+	else
+		console.log('In draw', paper);

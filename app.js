@@ -34,13 +34,13 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.session({secret: 'pandas'}));
 
 app.get('/', function(req, res, next) {
-  if (req.session) {
-    console.log(req.session);
-    req.session = null;
+  var username = req.session.username;
+  req.session = null;
+  if (username) {
+    res.render('index.ejs', {layout: false, username: username});
   } else {
-    req.session = null;
+    res.render('index.ejs', {layout: false, username: null});
   }
-  res.render('index.ejs', {layout: false});
   res.end();
 });
 
@@ -71,8 +71,8 @@ app.get('/auth/twitter/callback', function (req, res) {
         } else {
           req.session.oauth.access_token = oauth_access_token;
           req.session.oauth.access_token_secret = oauth_access_token_secret;
+          req.session.username = results.screen_name;
           res.redirect('/');
-          console.log(results);
         }
     });
   }

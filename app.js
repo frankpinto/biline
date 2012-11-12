@@ -37,9 +37,9 @@ app.get('/', function(req, res, next) {
   var username = req.session.username;
   req.session = null;
   if (username) {
-    res.render('index.ejs', {layout: false, username: username});
+    res.render('index.ejs', {layout: false, username: username, hidden: ''});
   } else {
-    res.render('index.ejs', {layout: false, username: null});
+    res.render('index.ejs', {layout: false, username: null, hidden: ' hidden'});
   }
   res.end();
 });

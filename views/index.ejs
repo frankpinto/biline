@@ -11,7 +11,6 @@
       socket = io.connect('http://' + window.location.hostname);
     </script>
     <script type="text/javascript" src="/js/paper.js"></script>
-    <script type="text/javascript" src="/js/domchanges.js"></script>
     <script type="text/paperscript" canvas="canvas" src="/js/draw.js"></script>
   </head>
   <body>
@@ -26,14 +25,14 @@
       <% } %>
 
       <div id="account" class="grab-container account-container">
-        <a href="#account" class="grab grab-account">Account</a>
-        <a href="#" class="grab back grab-account">Account</a>
+        <a href="#account" class="grab grab-account<%- hidden %>">Account</a>
+        <a href="#" class="grab back grab-account<%- hidden %>">Account</a>
         <div class="account-user">
           <div class="user"><%= username ? '@'+username : '@dummyuser' %></div>
           <div class="logout">Logout</div>
         </div>
         <div class="account-history">
-          <!--<ul>
+          <ul>
             <li>
               <img src="http://placekitten.com/200/100" />
               <div class="history-friend">@jonjohnjohnson</div>
@@ -90,14 +89,14 @@
               <img src="http://placekitten.com/200/300" />
               <div class="history-friend">@jonjohnjohnson</div>
             </li>
-          </ul>-->
+          </ul>
         </div>
       </div>
 
       <a class="home" href="#"></a>
       <div id="tools" class="grab-container tools-container">
-        <a href="#tools" class="grab grab-tools">Tools</a>
-        <a href="#" class="grab back grab-tools">Tools</a>
+        <a href="#tools" class="grab grab-tools<%- hidden %>">Tools</a>
+        <a href="#" class="grab back grab-tools<%- hidden %>">Tools</a>
         <div class="transparent">
           <div class="icon-transparent"></div>
           <div class="icon-transparent icon-transparent-light"></div>
@@ -109,8 +108,8 @@
       </div>
 
       <a class="home" href="#"></a>
-      <button class="proceed confirm"></button>
-      <button class="proceed undo"></button>
+      <button class="proceed confirm<%-hidden %>"></button>
+      <button class="proceed undo<%-hidden%>"></button>
     </div>
     <script type="text/javascript" src="/js/redraw.js"></script>
     <script type="text/javascript" src="/js/prevent.js">

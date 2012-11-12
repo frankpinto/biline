@@ -10,18 +10,18 @@ document.addEventListener('paperReady', function() {
 	console.log('In redraw', socketedPaper);
 
 	// Install PaperScope context
-	var setupRedraw = (function() {
-		console.log(this);
+	var setupRedraw = function() {
+		console.log(socketedPaper);
 
 		var originalLayer;
 		var secondLayer;
 		var pathsDrawn = 0;
-		var redraw = (function(packet) {
-			console.log(this);
+		var redraw = function(packet) {
+			console.log(socketedPaper);
 			if (!secondLayer)
 			{
-				originalLayer = this.projects[0].activeLayer;
-				secondLayer = new this.Layer();
+				originalLayer = socketedPaper.projects[0].activeLayer;
+				secondLayer = new socketedPaper.Layer();
 			}
 			else
 				secondLayer.activate();
@@ -29,7 +29,7 @@ document.addEventListener('paperReady', function() {
 			paths = packet.data;
 			while (pathsDrawn < paths.length)
 			{
-				var newPath = new this.Path();
+				var newPath = new socketedPaper.Path();
 				newPath.strokeColor = 'red';
 				newPath.fillColor = 'red';
 				newPath.strokeWidth = 1;
@@ -41,14 +41,14 @@ document.addEventListener('paperReady', function() {
 			
 			// Make sure it draws immediately
 			var canvasElement = document.getElementById('canvas');
-			this.views[0].draw();
+			socketedPaper.views[0].draw();
 			
 			// Switch back to what user is doing
 			originalLayer.activate();
-		}).bind(this);
+		};
 
 		socket.on('pathReady', redraw);
-	}).bind(socketedPaper);
+	};
 
 	setupRedraw();
 });

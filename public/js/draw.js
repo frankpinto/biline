@@ -33,29 +33,42 @@ function addStrokes(point, delta) {
     }
 }
 
+var strokeDrawn = false;
 function toggleProceed()
 {
-	buttons.forEach(function(b) {
-		if (hasClass(b, 'hidden'))
+  if (hasClass(buttons[0], 'hidden'))
+  {
+    strokeDrawn = true;
+    buttons.forEach(function(b) {
 			removeClass(b, 'hidden');
-		else
-			addClass(b, 'hidden');
-	});
+    });
+  }
+  else
+  {
+    strokeDrawn = false;
+    buttons.forEach(function(b) {
+      addClass(b, 'hidden');
+    });
+  }
 }
 
 /*
  * Event listeners - take care of drawing
  */
 function onMouseDown(event) {
-    //prevent(event);
+  if (!strokeDrawn)
+  {
     path = new Path();
     path.fillColor = "black";
     //path.add(event.point);
     serializedPath = {points: [], startPoint: null, endPoint: null};
+  }
 }
 
 var lastPoint;
 function onMouseDrag(event) {
+  if (!strokeDrawn)
+  {
     var step = event.delta / 2;
     thickness.angle = step.angle + 90;
 
@@ -68,10 +81,13 @@ function onMouseDrag(event) {
     serializedPath.points.splice(0, 0, [bottom.x, bottom.y]);
 
     lastPoint = event.point;
+  }
 }
 
 function onMouseUp(event) {
-		toggleProceed();
+  if (!strokeDrawn)
+  {
+    toggleProceed();
     var delta = event.point - lastPoint;
     delta.length = tool.maxDistance;
     //addStrokes(event.point, delta);
@@ -81,6 +97,7 @@ function onMouseUp(event) {
     serializedPath.endPoint = event.point;
     redrawData.push(serializedPath);
     socket.emit('segmentsReady', {data: redrawData});
+  }
 }
 
 if (paper.project)
@@ -90,5 +107,7 @@ if (paper.project)
 	document.dispatchEvent(event);
 	console.log('Dispatched paperReady event', paper);
 }
-	else
-		console.log('In draw', paper);
+else
+  console.log('In draw', paper);
+
+console.log(onMouseDown);

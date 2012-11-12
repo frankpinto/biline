@@ -69,11 +69,8 @@ function onMouseUp(event) {
 
 if (paper.project)
 {
-	var event = new CustomEvent("paperReady", {  
-		//detail: {paper: paper},
-		bubbles: true,  
-		cancelable: true  
-	}); 
+	var event = document.createEvent('HTMLEvents');
+	event.initEvent('paperReady', true, false);
 	document.dispatchEvent(event);
 	console.log('Dispatched paperReady event', paper);
 }

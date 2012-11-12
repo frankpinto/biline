@@ -3,6 +3,7 @@ function prevent(e) {
 }
 
 // For tablet, prevent browser window moving
+// TODO: Add checks to ensure touch device to not interfere w/ desktop
 DomReady.ready(function() {
   var aElements = document.getElementsByTagName('a');
   for (i = 0; i < aElements.length; i++)
@@ -11,4 +12,6 @@ DomReady.ready(function() {
   var buttonElements = document.getElementsByTagName('button');
   for (i = 0; i < buttonElements.length; i++)
     buttonElements[i].addEventListener('touchmove', prevent);
+
+  document.getElementById('body').addEventListener('touchmove', prevent);
 });

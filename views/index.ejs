@@ -12,8 +12,10 @@
     </script>
     <script type="text/javascript" src="/js/paper.js"></script>
     <script type="text/paperscript" canvas="canvas" src="/js/draw.js"></script>
+    <script type="text/javascript" src="/js/redraw.js"></script>
+    <script type="text/javascript" src="/js/prevent.js"></script>
   </head>
-  <body>
+  <body id="body">
     <div id="container" class="container">
       <canvas id="canvas" resize="true"></canvas>
 
@@ -26,10 +28,10 @@
 
       <div id="account" class="grab-container account-container">
         <a href="#account" class="grab grab-account<%- hidden %>">Account</a>
-        <a href="#" class="grab back grab-account<%- hidden %>">Account</a>
+        <a href="#account" class="grab back grab-account<%- hidden %>">Account</a>
         <div class="account-user">
-          <div class="user"><%= username ? '@'+username : '@dummyuser' %></div>
-          <div class="logout">Logout</div>
+          <div class="user"><%- username ? '@' + username : '' %></div>
+          <div id="logout" class="logout">Logout</div>
         </div>
         <div class="account-history">
           <ul>
@@ -93,10 +95,10 @@
         </div>
       </div>
 
-      <a class="home" href="#"></a>
+      <a class="home" href="#home"></a>
       <div id="tools" class="grab-container tools-container">
         <a href="#tools" class="grab grab-tools<%- hidden %>">Tools</a>
-        <a href="#" class="grab back grab-tools<%- hidden %>">Tools</a>
+        <a href="#tools" class="grab back grab-tools<%- hidden %>">Tools</a>
         <div class="transparent">
           <div class="icon-transparent"></div>
           <div class="icon-transparent icon-transparent-light"></div>
@@ -107,11 +109,9 @@
         <div class="icon-size icon-lg"></div>
       </div>
 
-      <a class="home" href="#"></a>
-      <button class="proceed confirm<%-hidden %>"></button>
-      <button class="proceed undo<%-hidden%>"></button>
+      <a class="home" href="#home"></a>
+      <button class="proceed confirm<%- hidden %>"></button>
+      <button class="proceed undo<%- hidden%>"></button>
     </div>
-    <script type="text/javascript" src="/js/redraw.js"></script>
-    <script type="text/javascript" src="/js/prevent.js">
   </body>
 </html>

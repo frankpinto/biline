@@ -34,7 +34,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.session({secret: 'pandas'}));
 
 app.get('/', function(req, res, next) {
-  var username = req.session.username;
+  var username = req.session.username;// || 'frankjpinto';
   req.session = null;
   if (username) {
     res.render('index.ejs', {layout: false, username: username, hidden: ''});

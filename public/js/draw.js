@@ -4,6 +4,11 @@ var thickness = new Point({length: thickMag, angle: null});
 var path;
 var strokeEnds = 2;
 
+// Shortcuts to proceed elements
+var undo = document.getElementById('undo');
+var proceed = document.getElementById('confirm'); // Think confirm is a reserved keyword
+var buttons = [undo, proceed];
+
 // Data to send across the sockets
 var redrawData = [];
 var serializedPath = {}; // Changes on every drawing
@@ -26,6 +31,16 @@ function addStrokes(point, delta) {
         strokePoint += offset;
         path.insert(0, strokePoint);
     }
+}
+
+function toggleProceed()
+{
+	buttons.forEach(function(b) {
+		if (hasClass(b, 'hidden'))
+			removeClass(b, 'hidden');
+		else
+			addClass(b, 'hidden');
+	});
 }
 
 /*
@@ -56,6 +71,7 @@ function onMouseDrag(event) {
 }
 
 function onMouseUp(event) {
+		toggleProceed();
     var delta = event.point - lastPoint;
     delta.length = tool.maxDistance;
     //addStrokes(event.point, delta);

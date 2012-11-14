@@ -3,6 +3,7 @@ var thickMag = 5;
 var thickness = new Point({length: thickMag, angle: null});
 var path;
 var strokeEnds = 2;
+var fillColor = new RgbColor(0.50, 0.50, 0.50); // Middle of range
 
 // Shortcuts to proceed elements
 var undo = document.getElementById('undo');
@@ -14,6 +15,7 @@ var small = document.getElementById('small_stroke');
 var med = document.getElementById('med_stroke');
 var large = document.getElementById('large_stroke');
 var strokes = [small, med, large];
+var transparencyRange = document.getElementById('transparency');
 
 // Data to send across the sockets
 var redrawData = [];
@@ -65,7 +67,7 @@ function onMouseDown(event) {
   if (!strokeDrawn)
   {
     path = new Path();
-    path.fillColor = "black";
+    path.fillColor = fillColor;
     //path.add(event.point);
     serializedPath = {points: [], startPoint: null, endPoint: null};
   }
@@ -139,13 +141,19 @@ function changeThickness(event)
   }
 }
 
+transparencyRange.addEventListener('mouseup', changeTransparency);
+function changeTransparency(event)
+{
+  val = parseInt(transparencyRange.value)/255;
+  console.log(val);
+  fillColor = new RgbColor(val, val, val); // Middle of range
+}
+
 /*
  * Proceed buttons' event handlers
  */
 undo.addEventListener('touchend', undoPath);
 undo.addEventListener('mouseup', undoPath);
-proceed.addEventListener('touchend', sendPaths);
-proceed.addEventListener('mouseup', sendPaths);
 function undoPath(event)
 {
   children = project.activeLayer.getChildren();
@@ -157,6 +165,9 @@ function undoPath(event)
   view.draw();
   toggleProceed();
 }
+
+proceed.addEventListener('touchend', sendPaths);
+proceed.addEventListener('mouseup', sendPaths);
 function sendPaths(event)
 {
   socket.emit('segmentsReady', {data: redrawData});

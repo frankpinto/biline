@@ -19,30 +19,34 @@ var io = require('socket.io').listen(app, {log: false});
 io.sockets.on('connection', function (socket) {
   socket.join('waitingRoom');
   console.log('Drawer named ' + socket.id + ' has joined the session.');
-  console.log(io.sockets.manager.rooms);
+  var partner = null;
+  var newRoomName = null;
 
   if (io.sockets.manager.rooms['/waitingRoom'].length % 2 === 0) {
-    var firstInQueue = io.sockets.sockets[io.sockets.manager.rooms['/waitingRoom'][0]];
-    var newRoomName = firstInQueue.id + ':' + socket.id;
+    partner = io.sockets.sockets[io.sockets.manager.rooms['/waitingRoom'][0]];
+    newRoomName = partner.id + ':' + socket.id;
 
     //the paired-up drawers both leave the waiting room BEFORE
     //going into the new room (we will find out empirically what
     //the actual best order to do this is)
-    firstInQueue.leave('waitingRoom');
+    partner.leave('waitingRoom');
     socket.leave('waitingRoom');
 
     //put the first drawer in the waiting room queue in a room with
     //the new drawer
-    firstInQueue.join(newRoomName);
+    partner.join(newRoomName);
     socket.join(newRoomName);
 
-    console.log(io.sockets.manager.rooms);
+    socket.broadcast.to(newRoomName).emit('foundPartner');
+
   } else {
-    console.log('Waiting for other client to connect');
+    socket.emit('waiting', { message: 'Waiting for another drawer'});
   }
 
   socket.on('segmentsReady', function (data) {
-    socket.broadcast.emit('pathReady', data);
+    if (partner) {
+      socket.broadcast.to(newRoomName).emit('pathReady', data);
+    }
   });
 
   socket.on('disconnect', function() {

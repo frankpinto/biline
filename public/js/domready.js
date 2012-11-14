@@ -1,3 +1,6 @@
+/*
+ * Utility Methods
+ */
 function hasClass(el, name)
 {
    return new RegExp('(\\s|^)' + name + '(\\s|$)').test(el.className);
@@ -15,7 +18,9 @@ function removeClass(el, name)
       el.className = el.className.replace(new RegExp('(\\s|^)' + name + '(\\s|$)'), ' ').replace(/^\s+|\s+$/g, '');
 }
 
-// DomReady - 
+/* DomReady
+ * Taken from jQuery
+ */
 (function(){
 
     var DomReady = window.DomReady = {};

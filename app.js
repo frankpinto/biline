@@ -17,8 +17,30 @@ var app = express.createServer();
 var io = require('socket.io').listen(app, {log: false});
 
 io.sockets.on('connection', function (socket) {
+  socket.join('waitingRoom');
   console.log('Drawer named ' + socket.id + ' has joined the session.');
-  //console.log('Waiting for other client to connect');
+  console.log(io.sockets.manager.rooms);
+
+  if (io.sockets.manager.rooms['/waitingRoom'].length % 2 === 0) {
+    var firstInQueue = io.sockets.sockets[io.sockets.manager.rooms['/waitingRoom'][0]];
+    var newRoomName = firstInQueue.id + ':' + socket.id;
+
+    //the paired-up drawers both leave the waiting room BEFORE
+    //going into the new room (we will find out empirically what
+    //the actual best order to do this is)
+    firstInQueue.leave('waitingRoom');
+    socket.leave('waitingRoom');
+
+    //put the first drawer in the waiting room queue in a room with
+    //the new drawer
+    firstInQueue.join(newRoomName);
+    socket.join(newRoomName);
+
+    console.log(io.sockets.manager.rooms);
+  } else {
+    console.log('Waiting for other client to connect');
+  }
+
   socket.on('segmentsReady', function (data) {
     socket.broadcast.emit('pathReady', data);
   });
@@ -80,5 +102,5 @@ app.get('/auth/twitter/callback', function (req, res) {
 
 
 app.listen(3000, function() {
-    console.log('Now listening on port 3000');    
+  console.log('Now listening on port 3000');
 });

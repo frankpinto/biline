@@ -189,7 +189,7 @@ a
   
 }
 
-.account-user .logout
+.account-user .save_image, .account-user .logout
 {
   background: #333;
   margin: 10px;
@@ -198,7 +198,7 @@ a
   border-radius: 5px;
 }
 
-.logout:active
+.save_image:active, .logout:active
 {
   background: #555;
 }

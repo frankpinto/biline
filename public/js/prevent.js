@@ -14,4 +14,15 @@ DomReady.ready(function() {
     buttonElements[i].addEventListener('touchmove', prevent);
 
   document.getElementById('canvas').addEventListener('touchmove', prevent);
+
+  /* 
+   * Turn canvas into dataURI. Save to stream later
+   */
+  document.getElementById('save').addEventListener('click', saveImage);
+  document.getElementById('save').addEventListener('touchend', saveImage);
+  function saveImage(event)
+  {
+    var pngURL = document.getElementById('canvas').toDataURL();
+    //console.log(pngURL);
+  }
 });

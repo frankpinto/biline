@@ -287,7 +287,7 @@ a
 .range-transparent
 {
   display: inline-block;
-  width: 115px;
+  width: 114px; /* 115px overflows on chrome */
 }
 
 .icon-transparent-light::after

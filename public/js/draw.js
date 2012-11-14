@@ -58,36 +58,6 @@ function toggleProceed()
   }
 }
 
-/* 
- * Settings change Event Handlers
- */
-strokes.forEach(function(s) {
-  s.addEventListener('mouseup', changeThickness);
-  s.addEventListener('touchend', changeThickness);
-});
-function changeThickness(event)
-{
-  if (event.target.dataset)
-     var strokeThickness = event.target.dataset.stroke;
-  else
-  {
-    if (event.target.hasAttribute('data-stroke'))
-      var strokeThickness = event.target.hasAttribute('data-stroke');
-  }
-
-  switch (strokeThickness) {
-    case 'small':
-      thickness = new Point({length: 2, angle: null});
-      break;
-    case 'large':
-      thickness = new Point({length: 7, angle: null});
-      break;
-    default:
-      thickness = new Point({length: 5, angle: null}); // Medium
-      break;
-  }
-}
-
 /*
  * Drawing Event Handlers
  */
@@ -136,6 +106,63 @@ function onMouseUp(event) {
   }
 }
 
+/* 
+ * Settings change Event Handlers
+ */
+strokes.forEach(function(s) {
+  s.addEventListener('mouseup', changeThickness);
+  s.addEventListener('touchend', changeThickness);
+});
+function changeThickness(event)
+{
+  strokes.forEach(function(s) {
+      removeClass(s, 'current');
+  });
+  addClass(event.target, 'current');
+  if (event.target.dataset)
+     var strokeThickness = event.target.dataset.stroke;
+  else
+  {
+    if (event.target.hasAttribute('data-stroke'))
+      var strokeThickness = event.target.hasAttribute('data-stroke');
+  }
+
+  switch (strokeThickness) {
+    case 'small':
+      thickness = new Point({length: 2, angle: null});
+      break;
+    case 'large':
+      thickness = new Point({length: 7, angle: null});
+      break;
+    default:
+      thickness = new Point({length: 5, angle: null}); // Medium
+      break;
+  }
+}
+
+/*
+ * Proceed buttons' event handlers
+ */
+undo.addEventListener('touchend', undoPath);
+undo.addEventListener('mouseup', undoPath);
+proceed.addEventListener('touchend', sendPaths);
+proceed.addEventListener('mouseup', sendPaths);
+function undoPath(event)
+{
+  children = project.activeLayer.getChildren();
+  if (children.length > 0)
+  {
+   project.activeLayer.removeChildren(children.length - 1);
+   redrawData.pop();
+  }
+  view.draw();
+}
+function sendPaths(event)
+{
+}
+
+
+// So that redraw knows when to initialize
 if (paper.project)
 {
 	var event = document.createEvent('HTMLEvents');

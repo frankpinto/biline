@@ -6,8 +6,14 @@ var strokeEnds = 2;
 
 // Shortcuts to proceed elements
 var undo = document.getElementById('undo');
-var proceed = document.getElementById('confirm'); // Think confirm is a reserved keyword
+var proceed = document.getElementById('confirm'); // Think 'confirm' is a reserved keyword
 var buttons = [undo, proceed];
+
+// Shortcuts to settings elements
+var small = document.getElementById('small_stroke');
+var med = document.getElementById('med_stroke');
+var large = document.getElementById('large_stroke');
+var strokes = [small, med, large];
 
 // Data to send across the sockets
 var redrawData = [];
@@ -52,8 +58,38 @@ function toggleProceed()
   }
 }
 
+/* 
+ * Settings change Event Handlers
+ */
+strokes.forEach(function(s) {
+  s.addEventListener('mouseup', changeThickness);
+  s.addEventListener('touchend', changeThickness);
+});
+function changeThickness(event)
+{
+  if (event.target.dataset)
+     var strokeThickness = event.target.dataset.stroke;
+  else
+  {
+    if (event.target.hasAttribute('data-stroke'))
+      var strokeThickness = event.target.hasAttribute('data-stroke');
+  }
+
+  switch (strokeThickness) {
+    case 'small':
+      thickness = new Point({length: 2, angle: null});
+      break;
+    case 'large':
+      thickness = new Point({length: 7, angle: null});
+      break;
+    default:
+      thickness = new Point({length: 5, angle: null}); // Medium
+      break;
+  }
+}
+
 /*
- * Event listeners - take care of drawing
+ * Drawing Event Handlers
  */
 function onMouseDown(event) {
   if (!strokeDrawn)
@@ -105,9 +141,4 @@ if (paper.project)
 	var event = document.createEvent('HTMLEvents');
 	event.initEvent('paperReady', true, false);
 	document.dispatchEvent(event);
-	console.log('Dispatched paperReady event', paper);
 }
-else
-  console.log('In draw', paper);
-
-console.log(onMouseDown);

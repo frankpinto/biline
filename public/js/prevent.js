@@ -13,5 +13,5 @@ DomReady.ready(function() {
   for (i = 0; i < buttonElements.length; i++)
     buttonElements[i].addEventListener('touchmove', prevent);
 
-  document.getElementById('body').addEventListener('touchmove', prevent);
+  document.getElementById('canvas').addEventListener('touchmove', prevent);
 });

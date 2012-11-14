@@ -28,7 +28,7 @@
 
       <div id="account" class="grab-container account-container">
         <a href="#account" class="grab grab-account<%- hidden %>">Account</a>
-        <a href="#account" class="grab back grab-account<%- hidden %>">Account</a>
+        <a href="#" class="grab back grab-account<%- hidden %>">Account</a>
         <div class="account-user">
           <div class="user"><%- username ? '@' + username : '' %></div>
           <div id="logout" class="logout">Logout</div>
@@ -98,15 +98,15 @@
       <a class="home" href="#home"></a>
       <div id="tools" class="grab-container tools-container">
         <a href="#tools" class="grab grab-tools<%- hidden %>">Tools</a>
-        <a href="#tools" class="grab back grab-tools<%- hidden %>">Tools</a>
+        <a href="#" class="grab back grab-tools<%- hidden %>">Tools</a>
         <div class="transparent">
           <div class="icon-transparent"></div>
           <div class="icon-transparent icon-transparent-light"></div>
           <input class="range-transparent" type="range">
         </div>
-        <div class="icon-size icon-sm current"></div>
-        <div class="icon-size icon-med"></div>
-        <div class="icon-size icon-lg"></div>
+        <div id="small_stroke" data-stroke="small" class="icon-size icon-sm current"></div>
+        <div id="med_stroke" data-stroke="medium" class="icon-size icon-med"></div>
+        <div id="large_stroke" data-stroke="large" class="icon-size icon-lg"></div>
       </div>
 
       <a class="home" href="#home"></a>

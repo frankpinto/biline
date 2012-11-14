@@ -7,17 +7,14 @@ document.addEventListener('paperReady', function() {
   paper.install(socketedPaper);
   socketedPaper.socket = socket;
   //socketedPaper.projects[0].activate();
-  console.log('In redraw', socketedPaper);
 
   // Install PaperScope context
   var setupRedraw = function() {
-    console.log(socketedPaper);
 
     var originalLayer;
     var secondLayer;
     var pathsDrawn = 0;
     var redraw = function(packet) {
-      console.log(socketedPaper);
       if (!secondLayer)
       {
         originalLayer = socketedPaper.projects[0].activeLayer;

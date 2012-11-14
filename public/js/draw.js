@@ -102,7 +102,6 @@ function onMouseUp(event) {
     //serializedPath.points.push([event.point.x, event.point.y]);
     serializedPath.endPoint = event.point;
     redrawData.push(serializedPath);
-    socket.emit('segmentsReady', {data: redrawData});
   }
 }
 
@@ -156,9 +155,12 @@ function undoPath(event)
    redrawData.pop();
   }
   view.draw();
+  toggleProceed();
 }
 function sendPaths(event)
 {
+  socket.emit('segmentsReady', {data: redrawData});
+  toggleProceed();
 }
 
 
